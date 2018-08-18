@@ -1,0 +1,37 @@
+﻿@model GXCalcWidget.Models.GXCalcMainModel
+
+
+<input type="text" id="gxc_sendDate" class="clGxcSendDate" placeholder="dd/mm/yyyy">
+<br />
+
+<input type="text" id="gxc_postcode" class="clGxcPostcode" placeholder="sender postcode"/> 
+<label id="lbl_gxc_postcode"></label>
+<br />
+
+
+<select id="gxc_receiverCountry" class="clGxcReceiverCountry" name="receiverCountry" onfocus='this.size=10;' onblur='this.size=1;' onchange='this.size = 1; this.blur();'>
+    <option value="" disabled selected>Receiver's Country</option>
+    @foreach (var item in Model.Countries)
+    {
+        <option value="@item.CountryId">@item.CountryName</option>
+    }
+</select>
+<br />
+
+<input type="text" id="gxc_txtRegion" class="clGxcTxtRegion"/>
+<br />
+
+<select id="gxc_receiverRegion" class="clGxcReceiverRegion" name="receiverRegion">
+    <option value="" disabled selected>No Country selected</option>
+
+</select>
+<br />
+
+
+<button id="gxc_SubmitGXClac" class="clGxcSubmit" onclick="gxc_calculate()">Click me</button>
+
+<br />
+<div id="gxc_result">
+
+</div>
+

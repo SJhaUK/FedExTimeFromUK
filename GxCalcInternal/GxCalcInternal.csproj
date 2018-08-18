@@ -1,0 +1,72 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="App_Data\GXCalculator.db" />
+    <None Remove="Content\bootstrap.css" />
+    <None Remove="Content\bootstrap.min.css" />
+    <None Remove="Content\GxCalcLogo1.png" />
+    <None Remove="Content\pfwLogo3.png" />
+    <None Remove="Content\Site.css" />
+    <None Remove="fonts\glyphicons-halflings-regular.eot" />
+    <None Remove="fonts\glyphicons-halflings-regular.svg" />
+    <None Remove="fonts\glyphicons-halflings-regular.ttf" />
+    <None Remove="fonts\glyphicons-halflings-regular.woff" />
+    <None Remove="Scripts\bootstrap.js" />
+    <None Remove="Scripts\bootstrap.min.js" />
+    <None Remove="Scripts\gxCalc.js" />
+    <None Remove="Scripts\jquery-1.10.2.js" />
+    <None Remove="Scripts\jquery-1.10.2.min.js" />
+    <None Remove="Scripts\jquery-1.10.2.min.map" />
+    <None Remove="Scripts\jquery.validate.js" />
+    <None Remove="Scripts\jquery.validate.min.js" />
+    <None Remove="Scripts\jquery.validate.unobtrusive.js" />
+    <None Remove="Scripts\jquery.validate.unobtrusive.min.js" />
+    <None Remove="Scripts\modernizr-2.6.2.js" />
+    <None Remove="Scripts\respond.js" />
+    <None Remove="Scripts\respond.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="App_Data\GXCalculator.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\GxCalcLogo1.png" />
+    <Content Include="Content\pfwLogo3.png" />
+    <Content Include="Content\Site.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\gxCalc.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="2.1.0" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.108" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.108" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,60 @@
+﻿@model GXCalcMainModel
+@*<div id="div_gxc_sendDate">
+        <input type="text" id="gxc_sendDate" class="clGxcSendDate" placeholder="dd/mm/yyyy">
+    </div>*@
+
+
+<br />
+<div id="div_gxc_postcode">
+    <input type="text" id="gxc_postcode" class="clGxcPostcode" placeholder="sender postcode" /><br />
+    <label id="lbl_gxc_postcode"></label>
+</div>
+
+
+
+<div id="div_gxc_receiverCountry">
+    <select id="gxc_receiverCountry" class="clGxcReceiverCountry" name="receiverCountry" onfocus='this.size=10;' onblur='this.size=1;' onchange='this.size = 1; this.blur();'>
+        <option value="" disabled selected>Receiver's Country</option>
+        @foreach (var item in Model.Countries)
+        {
+            <option value="@item.CountryId">@item.CountryName</option>
+        }
+    </select>
+</div>
+
+
+
+
+<div id="div_gxc_txtRegion">
+    <input type="text" id="gxc_txtRegion" class="clGxcTxtRegion" />
+</div>
+
+
+
+
+<div id="div_gxc_receiverRegion">
+    <select id="gxc_receiverRegion" class="clGxcReceiverRegion" name="receiverRegion">
+        <option value="" disabled selected>No Country selected</option>
+
+    </select>
+</div>
+
+
+
+@*<div id="div_gxc_SubmitGXClac">
+        <button id="gxc_SubmitGXClac" class="clGxcSubmit">Submit</button>
+    </div>*@
+
+<div id="div_gxc_GXClacResult">
+    <label id="gxc_GXClacResult" class="clGxcSubmit"></label>
+</div>
+
+
+
+
+
+<div id="div_gxc_result">
+
+</div>
+&#9432;
+

@@ -1,0 +1,163 @@
+﻿@model GXCalcTool.Models.GXCalcMainModel
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+<style>
+
+    #header {
+        background-color: #ED292A;
+        color: white;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+
+    .card{
+        outline: solid;
+        outline-width: 0.01em;
+        outline-color: rgba(0, 0, 0, 0.25);
+    }
+
+    #container_div {
+        margin-top: 1em;
+        margin-left: 4em;
+        margin-right: 4em;
+    }
+
+    #depot_info_div {
+        margin-top: 0.5em;
+        font-size: 1.15em;
+    }
+
+    #input_div {
+        margin-top: 1em;
+    }
+
+    #delivery_estimate_div {
+        margin-top: 1em;
+    }
+
+    .title_bar_div {
+        background-color: #ED292A;
+        color: white;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+
+    .title_bar_text {
+        margin-top: 0.3em;
+        margin-left: 0.75em;
+        text-align: left;
+    }
+
+    .well {
+        background-color: rgba(149, 207, 224, 0.43);
+    }
+
+    .well-sm {
+        background-color: rgb(10, 117, 189);
+        color: white;
+        padding: 0.1em;
+        padding-left: 0.3em;
+        padding-right: 0.3em;
+    }
+
+</style>
+
+<div id="header">
+    <div>
+        <img src="~/Content/GxCalcLogol.png" />
+        <br />
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div id="container_div">
+        <div class="row">
+            <div class="col-5 card rounded">
+                <div class="title_bar_div rounded">
+                    <h4 class="title_bar_text"><b>Sender Information</b></h4>
+                </div>
+                <div id="input_div" class="form-group">
+                    <div id="div_gxc_sendDate">
+                        <label for="gxc_sendDate">When you are you planning to send?</label>
+                        <input style="display: inline-block;" type="date" id="gxc_sendDate" class="clGxcSendDate form-control" placeholder="dd/mm/yyyy">
+                    </div>
+                    
+                    <div id="div_gxc_postcode" style="margin-top: 0.5em;">
+                        <label for="gxc_postcode">What is your postcode?</label>
+                        <input disabled type="text" id="gxc_postcode" class="clGxcPostcode form-control" placeholder="Sender postcode"/>
+                    </div>
+
+                    <div id="div_gxc_receiverCountry" style="margin-top: 0.5em;">
+                        <label for="gxc_receiverCountry">Which country are you sending to?</label>
+                        <select disabled id="gxc_receiverCountry" class="clGxcReceiverCountry form-control" name="receiverCountry">
+                            <option value="" disabled selected>Receiver's Country</option>
+                            @foreach (var item in Model.Countries)
+                            {
+                                <option value="@item.CountryId">@item.CountryName</option>
+                            }
+                        </select>
+                    </div>
+                    
+                    <div id="div_gxc_txtRegion" style="margin-top: 0.5em;">
+                        <label for="gxc_txtRegion">Which region are you sending to?</label>
+                        <input type="text" id="gxc_txtRegion" class="clGxcTxtRegion form-control" disabled />
+                    </div>
+
+                    <div id="div_gxc_receiverRegion">
+                        <select id="gxc_receiverRegion" class="clGxcReceiverRegion form-control" name="receiverRegion">
+                            <option value="" disabled selected>No Country selected</option>
+                        </select>
+                    </div>
+
+                    @*<div id="div_gxc_SubmitGXClac">
+                            <button id="gxc_SubmitGXClac" class="clGxcSubmit">Submit</button>
+                        </div>*@
+                </div>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-6 card rounded">
+                <div class="title_bar_div rounded">
+                    <h4 class="title_bar_text"><b>Depot Information</b></h4>
+                </div>
+
+                <div id="depot_info_div">
+                    <p style="text-align: center; margin-bottom: 0em;">Your nearest depot is the <label class="well well-sm rounded" id="lbl_gxc_postcode">......</label></p>
+                    <div class="well well-lg rounded">
+                        <div style="padding: 1em;" id="cutOffTimes">
+                            <p style="text-align: center;">The delivery estimate is subject to Parcelforce Worldwide receiving the package by the following cut-off times at your nearest depot.</p>
+                            <br />
+                            <p><b><u>Cut-off times</u></b></p>                            
+                            <p>To the Americas: <label id="lbl_gxc_america_cutoff" class="well well-sm rounded" style="color: white; background-color: rgb(67, 186, 79);">......</label></p>                           
+                            <p>To the rest of the world: <label id="lbl_gxc_other_cutoff" class="well well-sm rounded" style="color: white; background-color: rgb(67, 186, 79);">......</label></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1.5em;">
+            <div class="col-12 card rounded">
+                <div class="title_bar_div rounded">
+                    <h4 class="title_bar_text"><b>Delivery Estimates</b></h4>
+                </div>
+
+                <div id="delivery_estimate_div">
+                    <div id="div_gxc_GXClacResult" class="well well-lg" style="margin-bottom: 1em;">
+                        <div style="padding: 0.85em; height: 3.4em;">
+                            <p style="margin-bottom: 0em;"><b>Documents</b> will be delivered in <label class="well well-sm rounded" id="lbl_docs_delivery_days">......</label>. We expect to deliver the parcel on  <label class="well well-sm rounded" id="lbl_docs_delivery_date">............</label> by  <label class="well well-sm rounded" id="lbl_docs_delivery_time">......</label></p>
+                            <label id="gxc_GXClacResult" class="clGxcSubmit"></label>
+                        </div>
+                    </div>
+                    <div class="well well-lg" style="margin-bottom: 1em;">
+                        <div style="padding: 0.85em; height: 3.4em;">
+                            <p style="margin-bottom: 0em;"><b>Goods</b> will be delivered in <label class="well well-sm rounded" id="lbl_goods_delivery_days">......</label>. We expect to deliver the parcel on  <label class="well well-sm rounded" id="lbl_goods_delivery_date">............</label> by  <label class="well well-sm rounded" id="lbl_goods_delivery_time">......</label></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>

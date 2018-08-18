@@ -1,0 +1,89 @@
+﻿@*https://stackoverflow.com/questions/25442462/how-to-include-jquery-dynamically-in-any-website-using-pure-javascript*@
+
+
+
+
+<div id="gxCalcMain" class="clGxcMain">
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+
+        var gxcHost = "http://localhost:58961/Home/";
+        
+        (function () {
+            var xhr = new XMLHttpRequest;
+            xhr.onload = function () {
+                200 === xhr.status
+                    ? (function () {
+                        document.getElementById("gxCalcMain").innerHTML = xhr.responseText;
+                        $("#gxc_receiverRegion").hide();
+                    })()
+                    : document.getElementById("gxCalcMain").innerHTML = "GX Calc Error";
+            };
+            xhr.open("GET", (gxcHost + "GxCalcPartial"));
+            xhr.send();
+        })();
+
+        
+        $(document).on('change', "#gxc_receiverCountry", (function () {
+            $("#gxc_txtRegion").val("");
+            $("#gxc_txtRegion").attr("placeholder", "type region");
+            document.getElementById("gxc_receiverRegion").size = 0;
+            $("#gxc_receiverRegion").hide();
+        }));
+
+
+        $(document).on('change', "#gxc_receiverRegion", (function () {
+            $("#gxc_txtRegion").val($('#gxc_receiverRegion').find('option:selected').text());
+            $("#gxc_receiverRegion").hide();
+        }));
+
+
+        $(document).on('input', '#gxc_txtRegion', function () {
+            $("#gxc_receiverRegion").show();
+            document.getElementById("gxc_receiverRegion").size = 10;
+            $("#gxc_receiverRegion").html("");
+            $("#gxc_receiverRegion").disabled = true;
+
+            var valCountry = $("#gxc_receiverCountry").val();
+            var valRegion = $("#gxc_txtRegion").val();
+            if (valRegion.length > 2) {
+                var xhr = new XMLHttpRequest;
+                xhr.onload = function () {
+                    200 === xhr.status
+                        ? (function () {
+                            $("#gxc_receiverRegion").html(xhr.responseText);
+                            $("#gxc_receiverRegion").show();
+                        })()
+                        : $("#gxCalcMain").html("GX Calc Error");
+                };
+                xhr.open("GET",
+                    (gxcHost + "GetRegionSuggestions?countryId=" +
+                        valCountry +
+                        "&keyword=" +
+                        valRegion));
+                xhr.send();
+            } else {
+                $("#gxc_receiverRegion").hide();
+            }
+        });
+
+
+        $(document).on('focusout', '#gxc_postcode', function () {
+            var valPostcode = $("#gxc_postcode").val();
+            if (valPostcode.length > 4) {
+                var xhr = new XMLHttpRequest;
+                xhr.onload = function () {
+                    200 === xhr.status
+                        ? (function () { $("#lbl_gxc_postcode").text(xhr.responseText); })()
+                        : $("#lbl_gxc_postcode").html("Postcode not found");
+                };
+                xhr.open("GET", (gxcHost + "GetDepotSuggestions?postcode=" + valPostcode));
+                xhr.send();
+            }
+
+        });
+
+    </script>
+}

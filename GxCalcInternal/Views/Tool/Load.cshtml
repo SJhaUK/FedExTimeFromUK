@@ -1,0 +1,286 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>GX Calculator</title>
+    
+    <style type="text/css">
+        .clGxcSendDate {
+            
+        }
+        .clGxcDivSendDate {
+
+        }
+
+
+        .clGxcPostcode {
+            color:red;
+            
+        }
+        .clGxcDivPostcode {
+        }
+
+
+        .clGxcReceiverCountry {
+            
+        }
+        .clGxcDivReceiverCountry {
+        }
+
+
+        .clGxcTxtRegion {
+            
+        }
+        .clGxcDivTxtRegion {
+            
+        }
+
+
+        .clGxcReceiverRegion {
+            
+        }
+        .clGxcDivReceiverRegion {
+        }
+
+
+        .clGxcSubmit {
+            
+        }
+        .clGxcDivSubmit {
+        }
+
+
+        .clGxcMain {
+            
+        }
+        .clGxcDivMain {
+            
+        }
+
+    </style>
+</head>
+<body>
+    <div id="gxCalcMain" class="clGxcMain">
+
+    </div>
+
+    <script type="text/javascript">
+
+        //for local dev
+        var gxcHost = "http://localhost:26344/Tool/";
+
+        //deployment URL
+        //var gxcHost = "http://10.6.140.35/GXCalcInternal/Tool/";
+
+        var exceptionDepotName = "";
+        var exceptionDepotRequested = false;
+        var countryInAmericas = false;
+        var americaCountryIds = [9, 11, 12, 14, 18, 21, 24, 26, 28, 29, 33, 42, 43, 46, 50, 55, 58, 59, 64, 65, 66, 68, 73, 78, 88, 89, 90, 92, 96, 97, 100, 112, 141, 145, 151, 161, 172, 174, 175, 180, 186, 188, 189, 190, 191, 192, 208, 213, 227, 231, 237, 238, 241, 243, 244];
+
+        (function() {
+            var xhr = new XMLHttpRequest;
+            xhr.onload = function() {
+                200 === xhr.status
+                    ? (function() {
+                        document.getElementById("gxCalcMain").innerHTML = xhr.responseText;
+                        document.getElementById("div_gxc_receiverRegion").style.display = "none";
+                    })()
+                    : document.getElementById("gxCalcMain").innerHTML = "GX Calc Error";
+            };
+            xhr.open("GET", (gxcHost + "GxCalcTool"));
+            xhr.send();
+        })();
+
+
+        
+        document.getElementById('gxCalcMain').addEventListener('change',
+            (function(event) {
+                if (event.target.id === 'gxc_receiverCountry') {
+                    document.getElementById("gxc_GXClacResult").textContent = "";
+                    document.getElementById("gxc_txtRegion").disabled = false;
+                    document.getElementById("gxc_txtRegion").value = '';
+                    document.getElementById("gxc_txtRegion").placeholder = "start typing desired town / area";
+                    document.getElementById("gxc_receiverRegion").size = 0;
+                    document.getElementById("div_gxc_receiverRegion").style.display = "none";
+                }
+            }));
+
+        document.getElementById('gxCalcMain').addEventListener('change',
+            (function() {
+                if (event.target.id === 'gxc_receiverRegion') {
+                    document.getElementById("gxc_txtRegion").value = document.getElementById('gxc_receiverRegion').options[document.getElementById('gxc_receiverRegion').selectedIndex].text;
+                    document.getElementById("div_gxc_receiverRegion").style.display = "none";
+                    getResult();
+                }
+            }));
+
+        document.getElementById('gxCalcMain').addEventListener('input',
+            function(event) {
+
+                if (event.target.id === 'gxc_txtRegion') {
+                    document.getElementById('gxc_receiverRegion').size = 10;
+                    document.getElementById('gxc_receiverRegion').innerHTML = '';
+                    document.getElementById('gxc_receiverRegion').disabled = true;
+
+                    var valCountry =
+                        document.getElementById('gxc_receiverCountry').options[document
+                            .getElementById('gxc_receiverCountry').selectedIndex].value;
+
+                    console.log(valCountry);
+                    console.log(parseInt(valCountry));
+                    console.log(americaCountryIds.indexOf(parseInt(valCountry)));
+                    //check to see if its an american countryId
+                    if (americaCountryIds.indexOf(parseInt(valCountry)) >= 0) {
+                        console.log("American Country");
+                        countryInAmericas = true;
+                        console.log(countryInAmericas);
+                    }
+
+                    var valRegion = document.getElementById("gxc_txtRegion").value;
+
+
+                    if (valRegion.length > 2) {
+                        var xhr = new XMLHttpRequest;
+                        xhr.onload = function() {
+                            200 === xhr.status
+                                ? (function() {
+                                    document.getElementById('gxc_receiverRegion').innerHTML = xhr.responseText;
+                                    document.getElementById('div_gxc_receiverRegion').style.display = "block";
+                                    document.getElementById('gxc_receiverRegion').disabled = false;
+                                    //make depot exception here
+                                })()
+                                : document.getElementById('gxCalcMain').innerHTML = 'GX Calc Error';
+                        };
+                        xhr.open('GET',
+                            (gxcHost + 'GetRegionSuggestions?countryId=' + valCountry + '&keyword=' + valRegion));
+                        xhr.send();
+                    } else {
+                        document.getElementById('div_gxc_receiverRegion').style.display = 'none';
+                    }
+                }
+            });
+
+        document.getElementById('gxCalcMain').addEventListener('input',
+            function (event) {
+                if (event.target.id === 'gxc_postcode') {
+                    document.getElementById("gxc_receiverCountry").disabled = false;
+                }
+            });
+
+        document.getElementById('gxCalcMain').addEventListener('change',
+            function (event) {
+                if (event.target.id === 'gxc_sendDate') {
+                    document.getElementById("gxc_postcode").disabled = false;
+                    document.getElementById("gxc_postcode").placeholder = "Sender postcode";
+                }
+            });
+
+        document.getElementById('gxCalcMain').addEventListener('focusout',
+            function(event) {
+                if (event.target.id === 'gxc_postcode') {
+                    var valPostcode = document.getElementById("gxc_postcode").value;
+                    if (valPostcode.length >= 4) {
+                        var xhr = new XMLHttpRequest;
+                        xhr.onload = function() {
+                            200 === xhr.status
+                                ? (function () {
+                                    var result = xhr.responseText;
+                                    var resultArr = result.split(", ");
+                                    if (resultArr[0] == "Newcastle" || resultArr[0] == "York" || resultArr[0] == "Deeside") {
+                                        exceptionDepotName = resultArr[0];
+                                        exceptionDepotRequested = true;
+                                        //console.log(exceptionDepotRequested);
+                                        //console.log(exceptionDepotName);
+                                        //where last left off, should only need to update database now then test dates change correctly
+                                    }
+                                    document.getElementById("lbl_gxc_postcode").textContent = resultArr[0] + " depot";
+                                    document.getElementById("lbl_gxc_america_cutoff").textContent = resultArr[1];
+                                    document.getElementById("lbl_gxc_other_cutoff").textContent = resultArr[2];
+                                })()
+                                : document.getElementById("lbl_gxc_postcode").textContent = "Unkown Depot";
+                        };
+                        xhr.open("GET", (gxcHost + "GetDepotSuggestions?postcode=" + valPostcode));
+                        xhr.send();
+                    }
+                }
+            });
+
+        document.getElementById('gxCalcMain').addEventListener('click',
+            function(event) {
+                if (event.target.id === 'gxc_SubmitGXClac') {
+                    var valAreaId = document.getElementById("gxc_receiverRegion").value;
+                    if (valAreaId >= 1) {
+                        var xhr = new XMLHttpRequest;
+                        xhr.onload = function() {
+                            200 === xhr.status
+                                ? (function() {
+                                    document.getElementById("gxc_GXClacResult").textContent = xhr.responseText;
+                                })()
+                                : document.getElementById("gxc_GXClacResult").textContent = "Result Unknown";
+                        };
+                        xhr.open("GET", (gxcHost + "GetFdexTimeLine?areaId=" + valAreaId));
+                        xhr.send();
+                    }
+                }
+            });
+
+        function getResult() {
+            var valAreaId = document.getElementById("gxc_receiverRegion").value;
+            var dt = document.getElementById("gxc_sendDate").value;
+            if (valAreaId >= 1) {
+                var xhr = new XMLHttpRequest;
+                xhr.onload = function() {
+                    200 === xhr.status
+                        ? (function () {
+                            var result = xhr.responseText;
+                            var resultArr = result.split(", ");
+                            var extraDays = parseInt(resultArr[3]) + parseInt(resultArr[4]);
+                            //console.log(exceptionDepotRequested);
+                            //console.log(countryInAmericas);
+                            if (countryInAmericas == true && exceptionDepotRequested == true) {
+                                extraDays += 1;
+                            }
+                            var docDays = parseInt(resultArr[0]) + extraDays;
+                            var goodsDays = parseInt(resultArr[1]) + extraDays;
+                            var ukOrDestHoliday = "";
+                            if (parseInt(resultArr[3]) > 0) { ukOrDestHoliday = "destination country"; }
+                            else if(parseInt(resultArr[4]) > 0){ ukOrDestHoliday = "United Kingdom"; } 
+                            
+
+                            if ((parseInt(resultArr[3]) + parseInt(resultArr[4])) > 0) {
+                                alert(`During the period between your selected send date and the estimated arrival date there is a bank holiday in the ${ukOrDestHoliday}. \n \nWe have adjusted the estimated arrival date to compensate for this but please be aware that the date we generate may still be inaccurate because of this. `);
+                            }
+
+                            document.getElementById("lbl_docs_delivery_days").textContent = docDays + " day(s)";
+
+                            document.getElementById("lbl_docs_delivery_date").textContent = calcDeliveryDate(docDays);
+                            document.getElementById("lbl_goods_delivery_date").textContent = calcDeliveryDate(goodsDays);
+                            
+                            document.getElementById("lbl_docs_delivery_time").textContent = resultArr[2];
+                            document.getElementById("lbl_goods_delivery_days").textContent = goodsDays + " day(s)";
+                            document.getElementById("lbl_goods_delivery_time").textContent = resultArr[2];
+                        })()
+                        : document.getElementById("delivery_estimate_div").textContent = "Result Unknown";
+                };
+                xhr.open("GET", (gxcHost + "GetFdexTimeLine?areaId=" + valAreaId +"&postDate=" + dt));
+                xhr.send();
+            }
+        }
+
+        function calcDeliveryDate(days) {
+            var sendDate = document.getElementById("gxc_sendDate").value;
+            var date = new Date(sendDate);
+            date.setDate(date.getDate() + days);
+            return date.toDateString();
+        }
+
+    </script>
+</body>
+
+
+
+</html>
